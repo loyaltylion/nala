@@ -1,3 +1,6 @@
+require "awesome_print"
+require "pry"
+
 require File.expand_path("../../lib/nala", __FILE__)
 
 RSpec.configure do |config|

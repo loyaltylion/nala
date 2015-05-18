@@ -19,6 +19,14 @@ class MultipleArgsClass
   end
 end
 
+class SuccessClass
+  include Nala::Publisher
+
+  def call
+    publish(:success)
+  end
+end
+
 RSpec.describe Nala::Publisher do
   describe ".call" do
     let(:instance) { spy }
@@ -53,6 +61,16 @@ RSpec.describe Nala::Publisher do
 
         expect(instance).to have_received(:call).with(:hello, :there, :world)
       end
+    end
+  end
+
+  context "#call" do
+    it "invokes a handler" do
+      called = false
+
+      SuccessClass.call.on(:success) { called = true }
+
+      expect(called).to be(true)
     end
   end
 end

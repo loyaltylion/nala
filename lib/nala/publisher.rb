@@ -6,8 +6,24 @@ module Nala
 
     module ClassMethods
       def call(*args)
-        new.call(*args)
+        EventEmitter.new.tap do |emitter|
+          new.listen_with(emitter).call(*args)
+        end
       end
     end
+
+    def listen_with(emitter)
+      @emitter = emitter
+
+      self
+    end
+
+    def publish(event)
+      emitter.store_result(event)
+    end
+
+    private
+
+    attr_reader :emitter
   end
 end
