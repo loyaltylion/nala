@@ -46,7 +46,7 @@ class PlaceOrder
 end
 ```
 
-Usage of these use case style classes gives a home to your business login, removes
+Usage of these use case style classes gives a home to your business logic, removes
 conditionals from your Rails controllers and helps prevent your models getting too
 big.
 
