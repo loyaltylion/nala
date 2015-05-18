@@ -31,35 +31,30 @@ RSpec.describe Nala::Publisher do
   describe ".call" do
     let(:instance) { spy }
 
-    before { allow(use_case_class).to receive(:new) { instance } }
-
     context "with no arguments" do
-      let(:use_case_class) { NoArgsClass }
-
       it "instantiates and invokes #call" do
-        use_case_class.call
+        expect(NoArgsClass).to receive(:new).with(no_args) { instance }
+        expect(instance).to receive(:call)
 
-        expect(instance).to have_received(:call)
+        NoArgsClass.call
       end
     end
 
     context "with an argument" do
-      let(:use_case_class) { OneArgClass }
+      it "instantiates with the same argument and invokes #call" do
+        expect(OneArgClass).to receive(:new).with(:hello) { instance }
+        expect(instance).to receive(:call)
 
-      it "instantiates and invokes #call with the same argument" do
-        use_case_class.call(:hello)
-
-        expect(instance).to have_received(:call).with(:hello)
+        OneArgClass.call(:hello)
       end
     end
 
     context "with multiple arguments" do
-      let(:use_case_class) { MultipleArgsClass }
+      it "instantiates with the same arguments and invokes #call" do
+        expect(MultipleArgsClass).to receive(:new).with(:a, :b, :c) { instance }
+        expect(instance).to receive(:call)
 
-      it "instantiates and invokes #call with the same arguments" do
-        use_case_class.call(:hello, :there, :world)
-
-        expect(instance).to have_received(:call).with(:hello, :there, :world)
+        MultipleArgsClass.call(:a, :b, :c)
       end
     end
   end

@@ -7,7 +7,7 @@ module Nala
     module ClassMethods
       def call(*args)
         EventEmitter.new.tap do |emitter|
-          new.listen_with(emitter).call(*args)
+          new(*args).listen_with(emitter).call
         end
       end
     end
