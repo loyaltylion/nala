@@ -12,27 +12,46 @@ class OneArgClass
   end
 end
 
+class MultipleArgsClass
+  include Nala::Publisher
+
+  def call(_, _, _)
+  end
+end
+
 RSpec.describe Nala::Publisher do
   describe ".call" do
-    context "with no arguments" do
-      it "instantiates and invokes #call" do
-        instance = spy
-        allow(NoArgsClass).to receive(:new) { instance }
+    let(:instance) { spy }
 
-        NoArgsClass.call
+    before { allow(use_case_class).to receive(:new) { instance } }
+
+    context "with no arguments" do
+      let(:use_case_class) { NoArgsClass }
+
+      it "instantiates and invokes #call" do
+        use_case_class.call
 
         expect(instance).to have_received(:call)
       end
     end
 
     context "with an argument" do
-      it "instantiates and invokes #call with the same arguments" do
-        instance = spy
-        allow(OneArgClass).to receive(:new) { instance }
+      let(:use_case_class) { OneArgClass }
 
-        OneArgClass.call(:hello)
+      it "instantiates and invokes #call with the same argument" do
+        use_case_class.call(:hello)
 
         expect(instance).to have_received(:call).with(:hello)
+      end
+    end
+
+    context "with multiple arguments" do
+      let(:use_case_class) { MultipleArgsClass }
+
+      it "instantiates and invokes #call with the same arguments" do
+        use_case_class.call(:hello, :there, :world)
+
+        expect(instance).to have_received(:call).with(:hello, :there, :world)
       end
     end
   end
