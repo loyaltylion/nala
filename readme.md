@@ -80,3 +80,7 @@ class RegistrationController < ApplicationController
   # ...
 end
 ```
+
+## License
+
+See the [LICENSE](LICENSE.txt) file for license rights and limitations (MIT).
