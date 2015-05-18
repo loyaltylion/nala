@@ -5,8 +5,8 @@ module Nala
     end
 
     module ClassMethods
-      def call
-        new.call
+      def call(*args)
+        new.call(*args)
       end
     end
   end

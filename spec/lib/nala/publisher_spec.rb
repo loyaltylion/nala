@@ -1,8 +1,14 @@
-class MyClass
+class NoArgsClass
   include Nala::Publisher
 
   def call
-    publish(:ok)
+  end
+end
+
+class OneArgClass
+  include Nala::Publisher
+
+  def call(_)
   end
 end
 
@@ -11,11 +17,22 @@ RSpec.describe Nala::Publisher do
     context "with no arguments" do
       it "instantiates and invokes #call" do
         instance = spy
-        allow(MyClass).to receive(:new) { instance }
+        allow(NoArgsClass).to receive(:new) { instance }
 
-        MyClass.call
+        NoArgsClass.call
 
         expect(instance).to have_received(:call)
+      end
+    end
+
+    context "with an argument" do
+      it "instantiates and invokes #call with the same arguments" do
+        instance = spy
+        allow(OneArgClass).to receive(:new) { instance }
+
+        OneArgClass.call(:hello)
+
+        expect(instance).to have_received(:call).with(:hello)
       end
     end
   end
