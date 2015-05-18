@@ -13,6 +13,6 @@ Gem::Specification.new do |s|
   s.license     = "MIT"
 
   s.add_development_dependency "rspec", "~> 3.2"
-  s.add_development_dependency "awesome_print", "~> 1.6.1"
+  s.add_development_dependency "awesome_print", "~> 1.6"
   s.add_development_dependency "pry", "~> 0.10.1"
 end
