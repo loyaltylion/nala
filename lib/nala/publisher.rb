@@ -18,8 +18,8 @@ module Nala
       self
     end
 
-    def publish(event)
-      emitter.store_result(event)
+    def publish(event, *args)
+      emitter.store_result(event, args)
     end
 
     private

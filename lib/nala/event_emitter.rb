@@ -4,8 +4,8 @@ module Nala
       @events = {}
     end
 
-    def store_result(event)
-      events[event] = nil
+    def store_result(event, args)
+      events[event] = args
     end
 
     def on(event)

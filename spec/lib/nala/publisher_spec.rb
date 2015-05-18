@@ -1,57 +1,3 @@
-class NoArgsClass
-  include Nala::Publisher
-
-  def call
-  end
-end
-
-class OneArgClass
-  include Nala::Publisher
-
-  def call(_)
-  end
-end
-
-class MultipleArgsClass
-  include Nala::Publisher
-
-  def call(_, _, _)
-  end
-end
-
-class SuccessClass
-  include Nala::Publisher
-
-  def call
-    publish(:success)
-  end
-end
-
-class MultiPublishClass
-  include Nala::Publisher
-
-  def call
-    publish(:a)
-    publish(:b)
-  end
-end
-
-class BlockSpy
-  attr_reader :called
-
-  def initialize
-    @called = false
-  end
-
-  def called!
-    @called = true
-  end
-
-  def called?
-    @called
-  end
-end
-
 RSpec.describe Nala::Publisher do
   describe ".call" do
     let(:instance) { spy }
@@ -85,7 +31,7 @@ RSpec.describe Nala::Publisher do
   end
 
   context "#on" do
-    let(:block) { BlockSpy.new }
+    let(:block)       { BlockSpy.new }
     let(:other_block) { BlockSpy.new }
 
     it "invokes a handler for a published event" do
@@ -107,6 +53,13 @@ RSpec.describe Nala::Publisher do
 
       expect(block).to be_called
       expect(other_block).to be_called
+    end
+
+    it "passes arguments to handlers" do
+      PublishArgsClass.call
+        .on(:success) { |x| block.called_with!(x) }
+
+      expect(block.args).to eq([:the_answer])
     end
   end
 end
