@@ -27,6 +27,31 @@ class SuccessClass
   end
 end
 
+class MultiPublishClass
+  include Nala::Publisher
+
+  def call
+    publish(:a)
+    publish(:b)
+  end
+end
+
+class BlockSpy
+  attr_reader :called
+
+  def initialize
+    @called = false
+  end
+
+  def called!
+    @called = true
+  end
+
+  def called?
+    @called
+  end
+end
+
 RSpec.describe Nala::Publisher do
   describe ".call" do
     let(:instance) { spy }
@@ -59,13 +84,29 @@ RSpec.describe Nala::Publisher do
     end
   end
 
-  context "#call" do
-    it "invokes a handler" do
-      called = false
+  context "#on" do
+    let(:block) { BlockSpy.new }
+    let(:other_block) { BlockSpy.new }
 
-      SuccessClass.call.on(:success) { called = true }
+    it "invokes a handler for a published event" do
+      SuccessClass.call.on(:success) { block.called! }
 
-      expect(called).to be(true)
+      expect(block).to be_called
+    end
+
+    it "does not invoke a handler for an unpublished event" do
+      SuccessClass.call.on(:failure) { block.called! }
+
+      expect(block).not_to be_called
+    end
+
+    it "invokes multiple handlers when all are published" do
+      MultiPublishClass.call
+        .on(:a) { block.called! }
+        .on(:b) { other_block.called! }
+
+      expect(block).to be_called
+      expect(other_block).to be_called
     end
   end
 end
