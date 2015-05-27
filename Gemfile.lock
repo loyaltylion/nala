@@ -33,7 +33,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  awesome_print (~> 1.6.1)
+  awesome_print (~> 1.6)
   nala!
   pry (~> 0.10.1)
   rspec (~> 3.2)

@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.files       = ["lib/nala.rb"]
   s.homepage    = "http://rubygems.org/gems/nala"
   s.license     = "MIT"
+  s.require_paths = ["lib"]
 
   s.add_development_dependency "rspec", "~> 3.2"
   s.add_development_dependency "awesome_print", "~> 1.6"
