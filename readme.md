@@ -56,7 +56,7 @@ class OrderController < ApplicationController
 
   def create
     PlaceOrder.call(order_params)
-      .on(:ok) { |order| redirect_to orders_path, :notice => "..." }
+      .on(:ok)    { |order| redirect_to orders_path, :notice => "..." }
       .on(:error) { render :new }
   end
 
@@ -73,7 +73,7 @@ class RegistrationController < ApplicationController
   def create
     RegisterAccount.call(account_params)
       .on(:already_registered) { redirect_to login_path, :notice => "..." }
-      .on(:ok) { |user| redirect_to dashboard_path, :notice => "..." }
+      .on(:ok)    { |user| redirect_to dashboard_path, :notice => "..." }
       .on(:error) { render :new }
   end
 
@@ -85,13 +85,13 @@ end
 
 If you are using RSpec then you can use the supplied matcher by adding the following line to your `spec_helper.rb` file:
 
-```
+```ruby
 require "nala/rspec"
 ```
 
 Then within your specs, you can confirm that a handler is called with the following:
 
-```
+```ruby
 let(:block) { Nala::BlockSpy.new }
 
 it "invokes a handler for a published event" do
@@ -103,7 +103,7 @@ end
 
 If you want to check the arguments that are passed to the block you can use the following:
 
-```
+```ruby
 let(:block) { Nala::BlockSpy.new }
 
 it "passes multiple arguments to handlers" do
@@ -116,7 +116,7 @@ end
 
 If you need check the arguments attributes in more detail you can do the following:
 
-```
+```ruby
 let(:block) { Nala::BlockSpy.new }
 
 it "passes a user with the correct name" do
@@ -126,6 +126,15 @@ it "passes a user with the correct name" do
   user = block.args.first
   expect(user.name).to eq("Andy")
 end
+```
+
+## Building a publishing gem updates
+
+Bump the version number in `lib/nala/version.rb` and use the same number in the command below:
+
+```
+gem build nala.gemspec
+gem push nala-0.0.3.gem
 ```
 
 ## License
