@@ -21,6 +21,10 @@ module Nala
     def called?
       @called
     end
+
+    def spy
+      proc { |*args| called_with!(args) }
+    end
   end
 end
 

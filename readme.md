@@ -18,11 +18,13 @@ gem "nala"
 
 ## Usage
 
-Nala is intended to be used with use case style classes where the class performs a
-single action. These classes typically have verb names such as `PlaceOrder` etc.
+Nala is intended to be used with use case style classes where the class performs
+a single action. These classes typically have verb names such as `PlaceOrder`
+etc.
 
 To use, add the `Nala::Publisher` module to your class and expose a `call`
-instance method. If your class requires data, it can be passed to it via the constructor.
+instance method. If your class requires data, it can be passed to it via the
+constructor.
 
 For example:
 
@@ -46,9 +48,9 @@ class PlaceOrder
 end
 ```
 
-Usage of these use case style classes gives a home to your business logic, removes
-conditionals from your Rails controllers and helps prevent your models getting too
-big.
+Usage of these use case style classes gives a home to your business logic,
+removes conditionals from your Rails controllers and helps prevent your models
+getting too big.
 
 ```ruby
 class OrderController < ApplicationController
@@ -83,13 +85,15 @@ end
 
 ## Testing with RSpec
 
-If you are using RSpec then you can use the supplied matcher by adding the following line to your `spec_helper.rb` file:
+If you are using RSpec then you can use the supplied matcher by adding the
+following line to your `spec_helper.rb` file:
 
 ```ruby
 require "nala/rspec"
 ```
 
-Then within your specs, you can confirm that a handler is called with the following:
+Then within your specs, you can confirm that a handler is called with the
+following:
 
 ```ruby
 let(:block) { Nala::BlockSpy.new }
@@ -101,36 +105,56 @@ it "invokes a handler for a published event" do
 end
 ```
 
-If you want to check the arguments that are passed to the block you can use the following:
+If you want to check the arguments that are passed to the block you can use the
+following:
 
 ```ruby
 let(:block) { Nala::BlockSpy.new }
 
 it "passes multiple arguments to handlers" do
   PublishArgsClass.call
-    .on(:multiple) { |*x| block.called_with!(x) }
+    .on(:multiple) { |*args| block.called_with!(args) }
 
   expect(block).to be_called_with(:a, :b, :c)
 end
 ```
 
-If you need check the arguments attributes in more detail you can do the following:
+If you need check the arguments attributes in more detail you can do the
+following:
 
 ```ruby
 let(:block) { Nala::BlockSpy.new }
 
 it "passes a user with the correct name" do
   RegisterUser.call
-    .on(:success) { |*x| block.called_with!(x) }
+    .on(:success) { |*args| block.called_with!(args) }
 
   user = block.args.first
   expect(user.name).to eq("Andy")
 end
 ```
 
-## Building a publishing gem updates
+You can make the tracking of block arguments less verbose by using the `spy`
+method of `Nala::BlockSpy` and passing it as an explicit block to the `on`
+method:
 
-Bump the version number in `lib/nala/version.rb` and use the same number in the command below:
+```ruby
+let(:block) { Nala::BlockSpy.new }
+
+it "passes multiple arguments to handlers" do
+  PublishArgsClass.call
+    .on(:multiple, &block.spy)
+
+  expect(block).to be_called_with(:a, :b, :c)
+end
+```
+
+## Notes for maintainers
+
+**Building a publishing gem updates**
+
+Bump the version number in `lib/nala/version.rb` and use the same number in the
+command below:
 
 ```
 gem build nala.gemspec

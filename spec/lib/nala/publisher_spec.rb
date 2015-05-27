@@ -57,14 +57,14 @@ RSpec.describe Nala::Publisher do
 
     it "passes single argument to handlers" do
       PublishArgsClass.call
-        .on(:single) { |*x| block.called_with!(x) }
+        .on(:single, &block.spy)
 
       expect(block).to be_called_with(:a)
     end
 
     it "passes multiple arguments to handlers" do
       PublishArgsClass.call
-        .on(:multiple) { |*x| block.called_with!(x) }
+        .on(:multiple, &block.spy)
 
       expect(block).to be_called_with(:a, :b, :c)
     end
