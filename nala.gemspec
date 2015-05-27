@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.description   = "Help remove conditionals by emitting events from classes"
   s.authors       = ["Andy Pike"]
   s.email         = "andy@andypike.com"
-  s.files         = ["lib/nala.rb"]
+  s.files         = Dir["LICENSE.txt", "readme.md", "lib/**/*"]
   s.homepage      = "https://github.com/loyaltylion/nala"
   s.license       = "MIT"
   s.require_paths = ["lib"]
