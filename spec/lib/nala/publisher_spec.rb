@@ -31,8 +31,8 @@ RSpec.describe Nala::Publisher do
   end
 
   context "#on" do
-    let(:block)       { BlockSpy.new }
-    let(:other_block) { BlockSpy.new }
+    let(:block)       { Nala::BlockSpy.new }
+    let(:other_block) { Nala::BlockSpy.new }
 
     it "invokes a handler for a published event" do
       SuccessClass.call.on(:success) { block.called! }
@@ -55,11 +55,18 @@ RSpec.describe Nala::Publisher do
       expect(other_block).to be_called
     end
 
-    it "passes arguments to handlers" do
+    it "passes single argument to handlers" do
       PublishArgsClass.call
-        .on(:success) { |x| block.called_with!(x) }
+        .on(:single) { |*x| block.called_with!(x) }
 
-      expect(block.args).to eq([:the_answer])
+      expect(block).to be_called_with(:a)
+    end
+
+    it "passes multiple arguments to handlers" do
+      PublishArgsClass.call
+        .on(:multiple) { |*x| block.called_with!(x) }
+
+      expect(block).to be_called_with(:a, :b, :c)
     end
   end
 end

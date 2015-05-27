@@ -81,6 +81,53 @@ class RegistrationController < ApplicationController
 end
 ```
 
+## Testing with RSpec
+
+If you are using RSpec then you can use the supplied matcher by adding the following line to your `spec_helper.rb` file:
+
+```
+require "nala/rspec"
+```
+
+Then within your specs, you can confirm that a handler is called with the following:
+
+```
+let(:block) { Nala::BlockSpy.new }
+
+it "invokes a handler for a published event" do
+  SuccessClass.call.on(:success) { block.called! }
+
+  expect(block).to be_called
+end
+```
+
+If you want to check the arguments that are passed to the block you can use the following:
+
+```
+let(:block) { Nala::BlockSpy.new }
+
+it "passes multiple arguments to handlers" do
+  PublishArgsClass.call
+    .on(:multiple) { |*x| block.called_with!(x) }
+
+  expect(block).to be_called_with(:a, :b, :c)
+end
+```
+
+If you need check the arguments attributes in more detail you can do the following:
+
+```
+let(:block) { Nala::BlockSpy.new }
+
+it "passes a user with the correct name" do
+  RegisterUser.call
+    .on(:success) { |*x| block.called_with!(x) }
+
+  user = block.args.first
+  expect(user.name).to eq("Andy")
+end
+```
+
 ## License
 
 See the [LICENSE](LICENSE.txt) file for license rights and limitations (MIT).

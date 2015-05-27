@@ -2,6 +2,7 @@ require "awesome_print"
 require "pry"
 
 require File.expand_path("../../lib/nala", __FILE__)
+require File.expand_path("../../lib/nala/rspec", __FILE__)
 Dir["spec/support/**/*.rb"].each { |f| require File.expand_path(f) }
 
 RSpec.configure do |config|

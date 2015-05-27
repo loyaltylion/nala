@@ -40,6 +40,7 @@ class PublishArgsClass
   include Nala::Publisher
 
   def call
-    publish(:success, :the_answer)
+    publish(:single, :a)
+    publish(:multiple, :a, :b, :c)
   end
 end
