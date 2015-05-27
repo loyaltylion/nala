@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nala (0.0.4)
+    nala (0.0.6)
 
 GEM
   remote: https://rubygems.org/

@@ -66,7 +66,7 @@ class OrderController < ApplicationController
 end
 ```
 
-This comes in handy when there are more than two out comes to a use case:
+This comes in handy when there are more than two outcomes to a use case:
 
 ```ruby
 class RegistrationController < ApplicationController
@@ -142,10 +142,27 @@ method:
 let(:block) { Nala::BlockSpy.new }
 
 it "passes multiple arguments to handlers" do
-  PublishArgsClass.call
-    .on(:multiple, &block.spy)
+  PublishArgsClass.call.on(:multiple, &block.spy)
 
   expect(block).to be_called_with(:a, :b, :c)
+end
+```
+
+You can of course spy on multiple blocks in a single spec if you need to. We
+recommend naming your block after the event it will be called by (rather than
+just `block`):
+
+```ruby
+let(:success)  { Nala::BlockSpy.new }
+let(:notified) { Nala::BlockSpy.new }
+
+it "passes multiple arguments to handlers" do
+  PlaceOrder.call
+    .on(:success, &success.spy)
+    .on(:notified, &notified.spy)
+
+  expect(success).to be_called_with(order)
+  expect(notified).to be_called_with(:email)
 end
 ```
 

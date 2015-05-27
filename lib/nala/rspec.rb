@@ -6,7 +6,7 @@ module Nala
 
     def initialize
       @called = false
-      @args = []
+      @args   = []
     end
 
     def called!
@@ -19,7 +19,7 @@ module Nala
     end
 
     def called?
-      @called
+      called
     end
 
     def spy
@@ -36,6 +36,9 @@ RSpec::Matchers.define :be_called_with do |*expected_args|
   failure_message do |block|
     return "expected the block to be called but it was not" unless block.called?
 
-    "expected the block to be called with the arguments #{expected_args.inspect} but was called with #{block.args.inspect}"
+    %(
+      expected the block to be called with the arguments
+      #{expected_args.inspect} but it was called with #{block.args.inspect}
+    ).strip.squeeze(" ").delete("\n")
   end
 end
