@@ -8,14 +8,20 @@ end
 class OneArgClass
   include Nala::Publisher
 
-  def call(_)
+  def initialize(_)
+  end
+
+  def call
   end
 end
 
 class MultipleArgsClass
   include Nala::Publisher
 
-  def call(_, _, _)
+  def initialize(_, _, _)
+  end
+
+  def call
   end
 end
 
