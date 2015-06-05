@@ -7,12 +7,12 @@ Lightweight gem for adding events to use case style classes.
 To install via RubyGems run:
 
 ```
-gem install nala
+$ gem install nala
 ```
 
 To install via bundler, add this line to your Gemfile and run `bundle install`:
 
-```
+```ruby
 gem "nala"
 ```
 
@@ -81,6 +81,16 @@ class RegistrationController < ApplicationController
 
   # ...
 end
+```
+
+If in some cases you don't need to handle the events, you can either use `.call` or `#call` depending on your preference as internal calls to `#publish` will be ignored.
+
+```ruby
+PlaceOrder.call(order_params)
+
+# or
+
+PlaceOrder.new(order_params).call
 ```
 
 ## Testing with RSpec
@@ -156,7 +166,7 @@ just `block`):
 let(:success)  { Nala::BlockSpy.new }
 let(:notified) { Nala::BlockSpy.new }
 
-it "passes multiple arguments to handlers" do
+it "calls multiple handlers" do
   PlaceOrder.call
     .on(:success, &success.spy)
     .on(:notified, &notified.spy)

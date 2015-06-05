@@ -30,7 +30,7 @@ RSpec.describe Nala::Publisher do
     end
   end
 
-  context "#on" do
+  describe "#on" do
     let(:block)       { Nala::BlockSpy.new }
     let(:other_block) { Nala::BlockSpy.new }
 
@@ -67,6 +67,12 @@ RSpec.describe Nala::Publisher do
         .on(:multiple, &block.spy)
 
       expect(block).to be_called_with(:a, :b, :c)
+    end
+  end
+
+  describe "#call" do
+    it "ignores internal calls to #publish" do
+      expect(Square.new(2).call).to eq(4)
     end
   end
 end

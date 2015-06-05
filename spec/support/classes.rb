@@ -50,3 +50,19 @@ class PublishArgsClass
     publish(:multiple, :a, :b, :c)
   end
 end
+
+class Square
+  include Nala::Publisher
+
+  attr_reader :number
+
+  def initialize(number)
+    @number = number
+  end
+
+  def call
+    (number * number).tap do |answer|
+      publish(:ok, answer)
+    end
+  end
+end

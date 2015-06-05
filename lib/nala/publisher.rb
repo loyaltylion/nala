@@ -19,7 +19,9 @@ module Nala
     end
 
     def publish(event, *args)
-      emitter.store_result(event, args)
+      emitter.store_result(event, args) if emitter
+
+      args
     end
 
     private
