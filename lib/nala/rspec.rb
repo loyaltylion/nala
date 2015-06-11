@@ -26,6 +26,22 @@ module Nala
       proc { |*args| called_with!(args) }
     end
   end
+
+  module RSpecHelpers
+    def emit(event, *args)
+      Nala::EventEmitter.new.tap do |emitter|
+        emitter.store_result(event, args)
+      end
+    end
+
+    def block_spy
+      Nala::BlockSpy.new
+    end
+  end
+end
+
+RSpec.configure do |config|
+  config.include Nala::RSpecHelpers
 end
 
 RSpec::Matchers.define :be_called_with do |*expected_args|

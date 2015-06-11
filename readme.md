@@ -106,7 +106,7 @@ Then within your specs, you can confirm that a handler is called with the
 following:
 
 ```ruby
-let(:block) { Nala::BlockSpy.new }
+let(:block) { block_spy }
 
 it "invokes a handler for a published event" do
   SuccessClass.call.on(:success) { block.called! }
@@ -119,7 +119,7 @@ If you want to check the arguments that are passed to the block you can use the
 following:
 
 ```ruby
-let(:block) { Nala::BlockSpy.new }
+let(:block) { block_spy }
 
 it "passes multiple arguments to handlers" do
   PublishArgsClass.call
@@ -133,7 +133,7 @@ If you need check the arguments attributes in more detail you can do the
 following:
 
 ```ruby
-let(:block) { Nala::BlockSpy.new }
+let(:block) { block_spy }
 
 it "passes a user with the correct name" do
   RegisterUser.call
@@ -145,11 +145,10 @@ end
 ```
 
 You can make the tracking of block arguments less verbose by using the `spy`
-method of `Nala::BlockSpy` and passing it as an explicit block to the `on`
-method:
+method of `Nala::BlockSpy` (which `block_spy` returns) and passing it as an explicit block to the `on` method:
 
 ```ruby
-let(:block) { Nala::BlockSpy.new }
+let(:block) { block_spy }
 
 it "passes multiple arguments to handlers" do
   PublishArgsClass.call.on(:multiple, &block.spy)
@@ -163,8 +162,8 @@ recommend naming your block after the event it will be called by (rather than
 just `block`):
 
 ```ruby
-let(:success)  { Nala::BlockSpy.new }
-let(:notified) { Nala::BlockSpy.new }
+let(:success)  { block_spy }
+let(:notified) { block_spy }
 
 it "calls multiple handlers" do
   PlaceOrder.call
@@ -174,6 +173,18 @@ it "calls multiple handlers" do
   expect(success).to be_called_with(order)
   expect(notified).to be_called_with(:email)
 end
+```
+
+If you would like to stub calls to the `.call` method of your use case class but want to make sure handlers are called, you can use the supplied `emit` helper method like so:
+
+```
+allow(SuccessClass).to receive(:call) { emit(:success) }
+```
+
+or you can supply arguments to the block:
+
+```
+allow(SuccessClass).to receive(:call) { emit(:success, "My Argument") }
 ```
 
 ## Notes for maintainers

@@ -28,11 +28,32 @@ RSpec.describe Nala::Publisher do
         MultipleArgsClass.call(:a, :b, :c)
       end
     end
+
+    describe "testing usage" do
+      let(:controller) { MyController.new }
+
+      it "can be stubbed and event handlers called" do
+        allow(SuccessClass).to receive(:call) { emit(:success) }
+
+        controller.create
+
+        expect(controller.success).to be(true)
+        expect(controller.failure).to be(false)
+      end
+
+      it "can be stubbed and event handlers called with arguments" do
+        allow(SuccessClass).to receive(:call) { emit(:success, "Andy") }
+
+        controller.create
+
+        expect(controller.success_args).to eq("Andy")
+      end
+    end
   end
 
   describe "#on" do
-    let(:block)       { Nala::BlockSpy.new }
-    let(:other_block) { Nala::BlockSpy.new }
+    let(:block)       { block_spy }
+    let(:other_block) { block_spy }
 
     it "invokes a handler for a published event" do
       SuccessClass.call.on(:success) { block.called! }

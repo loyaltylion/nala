@@ -66,3 +66,21 @@ class Square
     end
   end
 end
+
+class MyController
+  attr_accessor :success, :failure, :success_args
+
+  def initialize
+    @success = false
+    @failure = false
+  end
+
+  def create
+    SuccessClass.call
+      .on(:success) do |name|
+        self.success = true
+        self.success_args = name
+      end
+      .on(:failure) { self.failure = true }
+  end
+end
