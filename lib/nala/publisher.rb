@@ -4,8 +4,10 @@ module Nala
       base.send(:extend, ClassMethods)
     end
 
-    module ClassMethods
-      def call(*args)
+  herpderp
+
+    ClassMethods
+      def call(*args, br)
         EventEmitter.new.tap do |emitter|
           new(*args).listen_with(emitter).call
         end
